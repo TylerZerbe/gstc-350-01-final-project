@@ -2,13 +2,10 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-
-  <!--The viewport meta tag is used to improve the presentation and behavior of the samples
-    on iOS devices-->
   <meta name="viewport"
         content="initial-scale=1, maximum-scale=1,user-scalable=no">
-  <title>Create Map with Custom ArcGISDynamicMapServiceLayer Layer
-    Definitions</title>
+  <title>NFL Teams</title>
+    <h1 class="title">NFL Team Stadiums</h1>
 
   <link rel="stylesheet"
         href="http://js.arcgis.com/3.12/esri/css/esri.css"/>
@@ -17,7 +14,31 @@
       padding: 0;
       margin: 0;
       height: 100%;
+        background-color: white;
     }
+ h1{
+     color: black;
+     font-size: 20px;
+ }
+    #NFC a:link{
+        color: blue;
+    }
+    #NFC a:visited{
+        color: blue;
+    }
+      #AFC a:link{
+          color: red;
+      }
+      #AFC a:visited{
+          color: red;
+      }
+
+.container{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    background-color: white;
+}
 
   </style>
 
@@ -30,32 +51,95 @@
      3) The map service should be pointed to a database.
      4) The map should have some interactive feature in it (drawing or buttons to turn layer on/off, etc).
      5) Be creative.
-     **/
+     */
 
     var map;
 
+
     require([
           "esri/map",
-          "esri/layers/ArcGISDynamicMapServiceLayer",
-          "esri/layers/ImageParameters",
+          "esri/layers/FeatureLayer",
+          "esri/geometry/Point",
+                    "esri/symbols/SimpleMarkerSymbol",
+                    "esri/graphic",
+                    "esri/Color",
           "dojo/domReady!"
         ],
-        function (Map, ArcGISDynamicMapServiceLayer, ImageParameters) {
+
+            function (Map, FeatureLayer, Point, SimpleMarkerSymbol, Graphic, Color) {
 
           map = new Map("mapDiv", {
-            basemap: "streets",
-            center: [-72, 42],
-            zoom: 7
+            basemap: "hybrid",
+            center: [-95.665, 37.6],
+            zoom: 4
           });
 
           // Create a new layer and add that layer to the map.
-          var lyr = new ArcGISDynamicMapServiceLayer("http://stg.tsstools.com/arcgis/rest/services/txdot/lrs/MapServer");
+          var lyr = new FeatureLayer("http://stg.tsstools.com/arcgis/rest/services/hu/hu2/MapServer/0");
           map.addLayer(lyr);
+
+           window.goToLonLat= function(Lon, Lat) {
+               point = new Point(Lon, Lat);
+               map.centerAndZoom(point, 18);
+               var simpleMarkerSymbol = new SimpleMarkerSymbol();
+               simpleMarkerSymbol.color= new Color([255, 255, 255]);
+
+               var graphic = new Graphic(point, simpleMarkerSymbol);
+
+               map.graphics.add(graphic);
+           }
         });
   </script>
 </head>
 
 <body>
 <div id="mapDiv"></div>
+<div class="container">
+    <h1 class="title">Select a Team</h1>
+<ul>
+    <li class="dropdown">
+        <a href="#" data-toggle="dropdown">NFC Teams<i class="icon-arrow"></i></a>
+        <ul class="dropdown-menu" id="NFC">
+            <li><a href="#" onClick = "goToLonLat(-75.167459, 39.900839)"> Philadelphia Eagles</a></li>
+            <li><a href="#" onClick = "goToLonLat(-97.094494, 32.747284)"> Dallas Cowboys</a></li>
+            <li><a href="#" onClick = "goToLonLat(-76.865118, 38.907747)"> Washington Redskins</a></li>
+            <li><a href="#" onClick = "goToLonLat(-74.074209, 40.81284)"> New York Giants</a></li>
+            <li><a href="#" onClick = "goToLonLat(-84.400835, 33.757448)"> Atlanta Falcons</a></li>
+            <li><a href="#" onClick = "goToLonLat(-80.85282, 35.225744)"> Carolina Panthers</a></li>
+            <li><a href="#" onClick = "goToLonLat(-90.081244, 29.951061)"> New Orleans Saints</a></li>
+            <li><a href="#" onClick = "goToLonLat(-82.503334, 27.975869)"> Tampa Bay Buccaneers</a></li>
+            <li><a href="#" onClick = "goToLonLat(-88.062208, 44.501341)"> Green Bay Packers</a></li>
+            <li><a href="#" onClick = "goToLonLat(-83.045603, 42.340006)"> Detroit Lions</a></li>
+            <li><a href="#" onClick = "goToLonLat(-87.616688, 41.862313)"> Chicago Bears</a></li>
+            <li><a href="#" onClick = "goToLonLat(-93.224331, 44.976714)"> Minnesota Vikings</a></li>
+            <li><a href="#" onClick = "goToLonLat(-122.331639, 47.595152)"> Seattle Seahawks</a></li>
+            <li><a href="#" onClick = "goToLonLat(-121.969852, 37.403197)"> San Francisco 49ers</a></li>
+            <li><a href="#" onClick = "goToLonLat(-90.188418, 38.632804)"> St Louis Rams</a></li>
+            <li><a href="#" onClick = "goToLonLat(-112.262559, 33.527625)"> Arizona Cardinals</a></li>
+        </ul>
+    </li>
+    <li class="dropdown">
+        <a href="#" data-toggle="dropdown">AFC Teams<i class="icon-arrow"></i></a>
+        <ul class="dropdown-menu" id="AFC">
+            <li><a href="#" onClick = "goToLonLat(-71.264346, 42.090946)"> New England Patriots</a></li>
+            <li><a href="#" onClick = "goToLonLat(-80.23886, 25.957966)"> Miami Dolphins</a></li>
+            <li><a href="#" onClick = "goToLonLat(-74.074209, 40.81284)"> New York Jets</a></li>
+            <li><a href="#" onClick = "goToLonLat(-78.786948, 42.773698)"> Buffalo Bills</a></li>
+            <li><a href="#" onClick = "goToLonLat(-86.163888, 39.760101)"> Indianapolis Colts</a></li>
+            <li><a href="#" onClick = "goToLonLat(-86.77129, 36.166479)"> Tennessee Titans</a></li>
+            <li><a href="#" onClick = "goToLonLat(-81.637074, 30.324662)"> Jacksonville Jaguars</a></li>
+            <li><a href="#" onClick = "goToLonLat(-95.410707, 29.684722)"> Houston Texans</a></li>
+            <li><a href="#" onClick = "goToLonLat(-80.01576, 40.446765)"> Pittsburgh Steelers</a></li>
+            <li><a href="#" onClick = "goToLonLat(-76.622704, 39.277988)"> Baltimore Ravens</a></li>
+            <li><a href="#" onClick = "goToLonLat(-84.516058, 39.095458)"> Cincinatti Bengals</a></li>
+            <li><a href="#" onClick = "goToLonLat(-81.699548, 41.506054)"> Cleveland Browns</a></li>
+            <li><a href="#" onClick = "goToLonLat(-105.020102, 39.74395)"> Denver Broncos</a></li>
+            <li><a href="#" onClick = "goToLonLat(-94.483916, 39.048939)"> Kansas City Chiefs</a></li>
+            <li><a href="#" onClick = "goToLonLat(-122.200373, 37.751579)"> Oakland Raiders</a></li>
+            <li><a href="#" onClick = "goToLonLat(-117.119572, 32.783112)"> San Diego Chargers</a></li>
+        </ul>
+    </li>
+    </ul>
+    </div>
 </body>
 </html>
